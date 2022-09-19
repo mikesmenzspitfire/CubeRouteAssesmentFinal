@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Categories;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Product;
+use App\Category;
+use App\ProductVariant;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -15,23 +17,27 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function create(Request $request)
+    // {
+    //     $product = new Product;
+    //     $product->name = 'dog food test many to many';
+    //     $product->slug = Str::slug('dog food test many to many');
+
+    //     $product->save();
+
+    //     $category = Category::find([3, 1]);
+    //     $product->categories()->attach($category);
+
+    //     return 'Success';
+    // }
+
+
+
     public function index()
     {
-        // Get all products
         
-        $productsShow =DB::table('products')
-        
-        ->select('*')
-          
-          ->get();
-        //   get all categories related to product
-        $categories = DB::table('categories')
-        ->join('category_products', 'categories.id', '=', 'category_products.category_id')
-        ->join('products', 'category_products.product_id', '=', 'products.id')
-        ->select('categories.name')
-        ->get();
-          
-        return view('/products/products' , ['products' => $productsShow, 'categories' => $categories]);
+        $products = db::table('products')->paginate(8);
+        return view('product.index' , compact('products',['products' => $products]));
     }
 
     /**
@@ -39,10 +45,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -66,7 +69,7 @@ class ProductController extends Controller
         
         // store the product
         $PostCat->save();
-        return redirect('product-category')->with('status', 'Added Product!!!');
+        return redirect('admin.index')->with('status', 'Added Product!!!');
     }
 
     /**
@@ -75,22 +78,18 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        
-
-        // Show selected product
-        $product = Product::find($id);
+public function show( $id)
+{
+    $product = Product::find($id);
         $variants = DB::table('product_variants')
         
         ->select('product_variants.*')
         ->where('product_variants.product_id', '=', $id)
         
         ->get();
-        return view('/products/product', ['product' => $product, 'variants' => $variants]);
-        
-
-    }
+        return view('product.show', ['product' => $product, 'variants' => $variants]);
+   
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -100,7 +99,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        //edit the product
+        $product = Product::find($id);
+        return view('admin.edit', compact('product'));
     }
 
     /**
@@ -110,6 +111,8 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     
     public function update(Request $request, $id)
     {
         $PostCat = new Product;
@@ -119,6 +122,7 @@ class ProductController extends Controller
         $PostCat->slug = $slug;
 
         $PostCat->update();
+
     }
 
     /**
@@ -129,6 +133,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //delete the product
+        $product = Product::find($id);
+        $product->delete();
+        return redirect('admin.index')->with('status', 'Deleted Product!!!');
     }
 }

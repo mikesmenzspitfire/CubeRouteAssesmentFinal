@@ -18,7 +18,7 @@ class ProductsSeeder extends Seeder
          // iterate through the data
          foreach ($data as $obj) {
              Product::create(array(
-                 
+                'id'=>$obj->id,
                  'name' => $obj->name,
                  'slug' => $obj->slug
              ));

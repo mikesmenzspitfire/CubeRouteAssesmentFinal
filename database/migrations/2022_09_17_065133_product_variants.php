@@ -4,24 +4,26 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductVariantsTable extends Migration
+class ProductVariants extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    // Col Names as per spreadsheet
-    // product_id,sap_product_code,web_product_code,name
     public function up()
     {
+        //
         Schema::create('product_variants', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('product_id')->nullable();
-            $table->string('sap_product_code');
-            $table->string('web_product_code')->nullable();
+            $table->bigIncrements('id');
+            $table->bigInteger('product_id')->nullable()->unsigned();
+            // $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->string('name')->nullable();
+            $table->string('sap_product_code')->nullable();
+            $table->string('web_product_code')->nullable();
+        //    timestamps
             $table->timestamps();
+            
         });
     }
 
@@ -32,6 +34,6 @@ class CreateProductVariantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_variants');
+        //
     }
 }

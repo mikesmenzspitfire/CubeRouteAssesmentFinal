@@ -10,6 +10,9 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+Vue.loadScript("/js/bootstrap.js")
+Vue.loadScript("/js/plugins.js")
+Vue.loadScript("/js/theme.js")
 
 /**
  * The following block of code may be used to automatically register your

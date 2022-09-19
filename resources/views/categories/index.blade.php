@@ -1,21 +1,40 @@
+@include('layouts.header', ['categories' => App\Category::all()])
+{{-- mkae this look better --}}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">Create New Category</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <form class="form-horizontal" role="form" method="POST" action="{{ url('/categories.store') }}">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" class="form-control" id="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="meta_title">Meta Title</label>
+                        <input type="text" name="meta_title" class="form-control" id="meta_title">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="meta_keywords">Meta Keywords</label>
+                        <input type="text" name="meta_keywords" class="form-control" id="meta_keywords">
+                    </div>
+                    <div class="form-group">
+                        <label for="meta_description">Meta Description</label>
+                        <input type="text" name="meta_description" class="form-control" id="meta_description">
+                        </div>
+                    </div class="row">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary">
+                </div>
+                </form>
+            </div>
+            </div>
+    
 
-@foreach ($categories as $category)
-    <h1>{{ $category->name }}</h1>
-    <p>{{ $category->description }}</p>
-<div class="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
-  <img :src="" :alt="" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
-</div>
-<div class="mt-4 flex justify-between">
-  <div>
-    <h3 class="text-sm text-gray-700">
-      <a :href="#">
-        <span aria-hidden="false" class="absolute inset-0" />
-        {{ $category->name }}
-      </a>
-    </h3>
-    {{-- <p class="card-text">{{ $product->description }}</p> --}}
-    <p class="mt-1 text-sm text-gray-500">{{ $category->name }}</p>
-  </div>
-  <p class="text-sm font-medium text-gray-900">{{ $category->name }}</p>
-</div>
-@endforeach
+@include('layouts.footer')

@@ -11,20 +11,20 @@ class CreateCategoriesTable extends Migration
      *
      * @return void
      */
-    // Col Names as per spreadsheet
-    // id,name,meta_title,meta_description,meta_keywords
-    
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unsigned();
             $table->string('name');
-            $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
-            $table->string('meta_keywords')->nullable();
+            $table->string('meta_title');
+            $table->string('meta_description');
+            $table->string('meta_keywords');
+            // timestamps
             $table->timestamps();
-
+            
+        
         });
+        
     }
 
     /**

@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Product;
-use App\categories;
-use App\category_product;
+use App\Category;
+use App\categoryProduct;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 
@@ -25,26 +26,17 @@ class ProductCategoryController extends Controller
     public function index()
     {
         //
+        $category = Category::all();
+        $product = Product::all();
 
-        $join = DB::table('category_products')
-            
-            ->join('categories', 'category_products.category_id', '=', 'categories.id')
-            ->select('category_products.*', 'categories.name')
-            ->get();
-
-            $prod = DB::table('category_products')
-            ->join('products', 'category_products.product_id', '=', 'products.id')
-            
-            ->select('category_products.*', 'products.name', )
-            ->get();
-
-        $products = DB::table('products')
-        ->select('id', 'name')
-        ->get();
         
-        $category = categories::all();
-        $category_product = category_product::all();
-        return view('/product-category/index', compact('products', 'category', 'category_product', 'join', 'prod', ['join' => $join, 'products' => $products, 'category' => $category, 'category_product' => $category_product, 'prod' => $prod ]));
+        
+        return view('product-category.index', compact('category', 'product'));
+    
+
+
+        
+        
     }
     public function getData(){
         $pageProd = Product::paginate(8);
@@ -62,13 +54,13 @@ class ProductCategoryController extends Controller
     public function store(Request $request)
     {
         
-        $PostCat = new category_product;
+        $PostCat = new categoryProduct;
         $PostCat->product_id = $request->product_id;
         $PostCat->category_id = $request->category_id;
         
         
         $PostCat->save();
-        return redirect('product-category')->with('status', 'Category added to product!');
+        return redirect('admin')->with('status', 'Category added to product!');
     }
 
     /**
@@ -101,8 +93,9 @@ class ProductCategoryController extends Controller
         ->select('id', 'name')
         ->get();
 
-        $category = categories::all();
-        $category_product = category_product::all();
+        $category = category::all();
+        $category_product = category_product::find($id);
+        return view('product-category.edit', compact('category_product', 'products', 'category', 'join'));
 
     }
 
@@ -128,7 +121,7 @@ class ProductCategoryController extends Controller
     public function destroy($id)
     {
         //Delete the product category relationship
-        $category_product = category_product::find($id);
+        $category_product = categoryProduct::find($id);
         $category_product->delete();
         return redirect('product-category')->with('status', 'Category removed from product!');
     }

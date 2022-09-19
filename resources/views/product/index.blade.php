@@ -1,7 +1,7 @@
-@extends('layouts.header')
+@include('layouts.header', ['categories' => App\Category::all()])
     
     
-    @section('content')
+    
     <section class="wrapper bg-light">
         <div class="container py-14 py-md-16">
           <div class="row align-items-center mb-10 position-relative zindex-1">
@@ -24,8 +24,9 @@
           <!--/.row -->
           <div class="grid grid-view projects-masonry shop mb-13">
             <div class="row gx-md-8 gy-10 gy-md-13 isotope">
-                @foreach ($products as $product)
+              @foreach ($products as $product)
               <div class="project item col-md-6 col-xl-4">
+                  {{-- Add section --}}
                 <figure class="rounded mb-6">
                   <img src="https://res.cloudinary.com/epetstore/image/upload/t_product-category-image/31412/royal_wet_mini_adult.jpg" alt="" />
                   
@@ -34,16 +35,23 @@
                 </figure>
                 <div class="post-header">
                   <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+                   
+                    <div class="d-flex flex-row align-items-center">
+                      
+                      
+                    </div>
                     
                     
                     
                   </div>
-                  <h3 class="h5 mb-2"><a href="{{url('products', ['id' => $product->id])}}">{{$product->name}}</a></h3>
+                  <h3 class="h5 mb-2"><a href="{{url('products', ['id' => $product->id])}}">{{ $product->name }}</a></h3>
                   
                 </div>
                 <!-- /.post-header -->
               </div>
               @endforeach
+                <!-- /.post-header -->
+             
               <!-- /.item -->
              
             </div>
@@ -51,21 +59,7 @@
           </div>
           <!-- /.grid -->
           <nav class="d-flex justify-content-center" aria-label="pagination">
-            <ul class="pagination">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true"><i class="uil uil-arrow-left"></i></span>
-                </a>
-              </li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true"><i class="uil uil-arrow-right"></i></span>
-                </a>
-              </li>
-            </ul>
+            {{ $products->links() }}
             <!-- /.pagination -->
           </nav>
           <!-- /nav -->
@@ -77,6 +71,7 @@
       <!-- /section -->
     </div>
 
-    @endsection
+   
+    @include('layouts.footer')
     
     

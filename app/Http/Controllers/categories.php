@@ -1,19 +1,36 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Category;
+use App\Product;
 use Illuminate\Http\Request;
 
-class CategoryRelController extends Controller
+use function spec\Laracasts\Generators\Migrations\getStub;
+
+class Categories extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function view(){
+        
+    }
+
+
     public function index()
     {
         //
+        $categories = Category::all();
+        $products = Product::all();
+        // get related 
+        Category::with('products')->get();
+        
+        
+        return view('categories.index', compact('categories', 'products'));
+        
     }
 
     /**
@@ -23,7 +40,9 @@ class CategoryRelController extends Controller
      */
     public function create()
     {
-        //
+        //get form input and save to database
+
+        return view('categories.create');
     }
 
     /**
@@ -34,7 +53,14 @@ class CategoryRelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       //get form input and save to database
+         $category = new Category();
+            $category->name = $request->name;
+            $category->meta_title = $request->meta_title;
+            $category->meta_description = $request->meta_description;
+            $category->meta_keywords = $request->meta_keywords;
+            $category->save();
+            return redirect()->route('categories.index');   
     }
 
     /**
@@ -45,7 +71,13 @@ class CategoryRelController extends Controller
      */
     public function show($id)
     {
-        //
+        //Show product in category
+        $category = Category::find($id);
+        $products = $category->products;
+        return view('categories.show', compact('category', 'products'));
+        // return view('categories.show', compact('category', 'products'));
+        
+       
     }
 
     /**

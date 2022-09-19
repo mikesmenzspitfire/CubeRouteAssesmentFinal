@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Categories;
+use App\Category;
 
 
 class CategorySeeder extends Seeder
@@ -18,7 +18,7 @@ class CategorySeeder extends Seeder
   $data = json_decode($json);
   // iterate through the data
   foreach ($data as $obj) {
-      Categories::create(array(
+      Category::create(array(
             
             'name' => $obj->name,
             'meta_title' => $obj->meta_title,

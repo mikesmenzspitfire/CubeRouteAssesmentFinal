@@ -1,28 +1,14 @@
-@extends('layouts.app')
+@include('layouts.header', ['categories' => App\Category::all()])
 
-@section('content')
+
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+    @if(session('status'))
+      <div class="alert alert-success">
+          {{ session('status') }}
+      </div>
+      @endif
+      
+    
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+@include('layouts.footer')
 
-                    {{ __('You are logged in!') }}
-                    @foreach ($categories as $category)
-                    {{ $category->name }}
-
-                    @endforeach
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection

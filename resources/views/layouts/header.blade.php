@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,9 +58,17 @@
         </div>
         <div class="offcanvas-body ms-lg-auto d-flex flex-column h-100">
           <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="{{url('/products')}}">Products</a></li>
-           
             
+            <li class="nav-item"><a class="nav-link" href="{{url('/products')}}">Products</a></li>
+            
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Categories</a>
+            <ul class="dropdown-menu">
+              @foreach ($categories as $category)
+              <li class="nav-item"><a class="dropdown-item" href="{{url('categories', ['id' => $category->id])}}">{{ $category->name }}</a></li>
+              @endforeach
+             
+            </ul>
+          </li>
                 <!--/.mega-menu-content-->
               </div>
            
@@ -72,7 +81,7 @@
          
           <li class="nav-item d-none d-md-block">
            
-            <a href="{{url('/product-category')}}" class="btn btn-sm btn-primary rounded-pill" >Administration</a>
+            <a href="{{url('/admin')}}" class="btn btn-sm btn-primary rounded-pill" >Administration</a>
           </li>
           <li class="nav-item d-lg-none">
             <button class="hamburger offcanvas-nav-btn"><span></span></button>
@@ -85,7 +94,7 @@
     <!-- /.container -->
   </nav>
   <!-- /.navbar -->
-  
+</header>
   <!--/.modal -->
 
   

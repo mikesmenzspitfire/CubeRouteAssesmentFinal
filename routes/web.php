@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\Categories;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\CategoryController;
+
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProductAdminController;
 use App\Http\Middleware\Authenticate;
 
 
@@ -25,10 +26,15 @@ use App\Http\Middleware\Authenticate;
 
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/', [ProductController::class, 'index']);
-    
  });
 
  Route::auth('login', 'Auth\LoginController');
+
+// Include Categories in header
+Route::get('/', function () {
+    $categories = DB::table('categories')->get();
+    return view('home', ['categories' => $categories]);
+});
 
 
 
@@ -43,7 +49,8 @@ Route::group(['middleware' => ['auth']], function() {
     // GET
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-
+Route::get('product/create', 'ProductController@create')->name('product.create');
+Route::get('product/{product}', 'ProductController@show')->name('product.show');
 // POST
 Route::post('/products', [ProductController::class, 'store']);
 Route::post('/products/{id}', [ProductController::class, 'update']);
@@ -56,7 +63,7 @@ Route::put('/products/{id}', [ProductController::class, 'update']);
 
 /*
 |--------------------------------------------------------------------------
-| Product Category Relationship Routes
+| Product Categories Relationship Routes
 |--------------------------------------------------------------------------
 |
 */
@@ -84,18 +91,26 @@ Route::put('/product-category/{id}', [ProductCategoryController::class, 'update'
 */
     
         // GET
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
+Route::get('/categories', [Categories::class, 'index']);
+Route::get('/categories/{id}', [Categories::class, 'show']);
+
+// create
+Route::get('/categories/create', [Categories::class, 'create']);
+
+
 
 // POST
-Route::post('/categories', [CategoryController::class, 'store']);
-Route::post('/categories/{id}', [CategoryController::class, 'update']);
+Route::post('/categories', [Categories::class, 'store']);
+Route::post('/categories/{id}', [Categories::class, 'update']);
 
 // DELETE
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
+Route::delete('/categories/{id}', [Categories::class, 'destroy']);
 
 // PUT
-Route::put('/categories/{id}', [CategoryController::class, 'update']);
+Route::put('/categories/{id}', [Categories::class, 'update']);
+
+// EDIT
+Route::get('/categories/{id}/edit', [Categories::class, 'edit']);
 
 /*
 
@@ -105,6 +120,7 @@ Route::put('/categories/{id}', [CategoryController::class, 'update']);
 |--------------------------------------------------------------------------
 |
 */
+
 
     // GET
 Route::get('/product-variants', [ProductVariantController::class, 'index']);
@@ -120,7 +136,24 @@ Route::delete('/product-variants/{id}', [ProductVariantController::class, 'destr
 // PUT
 Route::put('/product-variants/{id}', [ProductVariantController::class, 'update']);
 
-/*
+
+// Admin Routes
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/admin', [ProductAdminController::class, 'index']);
+    Route::get('/admin/products', [ProductAdminController::class, 'index']);
+    Route::get('/admin/products/create', [ProductAdminController::class, 'create']);
+    Route::get('/admin/products/{id}', [ProductAdminController::class, 'show']);
+    Route::get('/admin/products/{id}/edit', [ProductAdminController::class, 'edit']);
+    Route::post('/admin/store', [ProductAdminController::class, 'store']);
+    Route::put('/admin/products/{id}', [ProductAdminController::class, 'update']);
+    Route::delete('/admin/products/{id}', [ProductAdminController::class, 'destroy']);
+});
+
+// Include Categories in header
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -143,6 +176,29 @@ Route::delete('/product-relationships/{id}', [ProductRelationshipController::cla
 // PUT
 Route::put('/product-relationships/{id}', [ProductRelationshipController::class, 'update']);
 
+
+/*
+|--------------------------------------------------------------------------
+| Product Admin Routes
+|--------------------------------------------------------------------------
+|
+*/
+    
+// GET
+Route::get('/admin', [ProductAdminController::class, 'adminCategory']);
+
+// POST
+Route::post('/admin', [ProductAdminController::class, 'store']);
+Route::post('/admin/{id}', [ProductAdminController::class, 'update']);
+
+// DELETE
+Route::delete('/admin/{id}', [ProductAdminController::class, 'destroy']);
+
+// PUT
+Route::put('/admin/{id}', [ProductAdminController::class, 'update']);
+
+// EDIT
+Route::get('/admin/{id}/edit', [ProductAdminController::class, 'edit']);
 
 
 
